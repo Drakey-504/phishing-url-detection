@@ -1,0 +1,5 @@
+dataset,class,n,has_scheme,starts_https,starts_www,has_path,exact_https_www_homepage
+Kaggle,phishing,114295,0.0009,0.0007,0.132,0.9213,0.0
+Kaggle,legitimate,392897,0.0,0.0,0.0767,0.8881,0.0
+PhiUSIIL,phishing,100520,1.0,0.4863,0.415,0.2836,0.0103
+PhiUSIIL,legitimate,134850,1.0,1.0,1.0,0.0,1.0

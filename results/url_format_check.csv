@@ -1,0 +1,8 @@
+check,accuracy,precision,recall,accuracy_test_split,urls,roc_auc,flagged_as_phishing
+homepage_rule_phiusiil,0.9956,1.0,0.9897,0.9959,,,
+random_forest PhiUSIIL (within dataset),0.9961,,,,as given (course setup),0.9983,0.4241
+random_forest PhiUSIIL (within dataset),0.8566,,,,scheme and www. stripped,0.8768,0.3118
+random_forest Kaggle -> PhiUSIIL,0.702,,,,as given (course setup),0.7137,0.2841
+random_forest Kaggle -> PhiUSIIL,0.3331,,,,scheme and www. stripped,0.1817,0.9049
+random_forest PhiUSIIL -> Kaggle,0.2253,,,,as given (course setup),0.5747,1.0
+random_forest PhiUSIIL -> Kaggle,0.2241,,,,scheme and www. stripped,0.4927,0.9987

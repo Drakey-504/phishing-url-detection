@@ -1,0 +1,5 @@
+# Versions used for the reported results (Google Colab, CPU-only)
+pandas==2.2.2
+numpy==2.0.2
+scikit-learn==1.6.1
+tensorflow==2.19.0
