@@ -1,0 +1,10 @@
+# Datasets (download links in README.md)
+*.csv
+!results/*.csv
+
+# Local and editor files
+.DS_Store
+__pycache__/
+.ipynb_checkpoints/
+.venv/
+.idea/
