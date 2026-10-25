@@ -8,7 +8,7 @@ Given only a URL string, how accurately and how quickly can a model tell phishin
 
 - **The character-level CNN is the strongest model when both classes look alike.** On the Kaggle dataset, where phishing and legitimate URLs share a similar format (almost none include `http(s)://`), the CNN reached 97.6% accuracy, F1 0.947, and ROC-AUC 0.995. The Random Forest and DNN, which only see 10 hand-crafted lexical features, reached F1 0.78 and 0.65.
 - **Models that look excellent on one dataset fail on the other.** Every model trained on one dataset dropped to ROC-AUC 0.24–0.71 when tested on the other, including models that scored above 99% within their own dataset.
-- **All three models are fast enough for real-time use on a CPU.** Averaged over batched inference, the Random Forest and DNN took about 0.04–0.05 ms per URL (20K–24K URLs/sec) and the CNN about 0.21 ms (about 4.7K URLs/sec).
+- **All three models are fast on CPU.** Averaged over batched inference, the Random Forest and DNN took about 0.04–0.05 ms per URL (20K–24K URLs/sec) and the CNN about 0.21 ms (about 4.7K URLs/sec).
 - **The near-perfect PhiUSIIL scores reflect how that dataset formats its URLs.** See [Follow-up after the course](#follow-up-after-the-course-october-2026): a one-line formatting rule matches the Random Forest's accuracy there.
 
 ## Results
@@ -36,6 +36,8 @@ Given only a URL string, how accurately and how quickly can a model tell phishin
 | | Character CNN | 0.225 | 0.49 |
 
 Trained on PhiUSIIL, all three models flag nearly every Kaggle URL as phishing (recall 0.98–1.00), so their accuracy falls to about Kaggle's 22.5% phishing rate.
+
+ROC-AUC well below 0.5 (for example, the DNN's 0.245 when trained on Kaggle and tested on PhiUSIIL) means the ranking is inverted: signals a model learned on one dataset point the opposite way on the other, a stronger sign of dataset shift than random noise.
 
 Latency is the average time per URL when scoring the test set in batches of 1,024 on CPU (Google Colab, 8 vCPUs), averaged over 3 runs. It covers model inference on precomputed features and character sequences; feature extraction is not timed. Scoring a single URL at a time would likely take longer per URL.
 
