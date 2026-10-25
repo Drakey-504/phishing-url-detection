@@ -2,7 +2,7 @@
 
 Given only a URL string, how accurately and how quickly can a model tell phishing from legitimate? This project compares three model families on two public datasets, measures CPU inference speed, and tests whether models trained on one dataset still work on the other.
 
-**Course:** 95-747 Security Data Analytics, Carnegie Mellon University, Fall 2025 (final project, solo)
+**Course:** 95-747 Security Data Analytics, Carnegie Mellon University, Fall 2025
 
 ## Key findings
 
@@ -51,7 +51,11 @@ Both neural networks use early stopping on the validation set. All results come 
 
 *Added after the course; not part of the submitted project.*
 
-**What this checks.** Two questions. First, whether the near-perfect PhiUSIIL results (99.6% accuracy for the Random Forest) come from recognizing phishing or from how the dataset happens to format its URLs. Second, whether the formatting difference between the two datasets explains the cross-dataset collapse. `scripts/check_url_format_artifacts.py` compares URL formatting between the classes, scores a one-line formatting rule, and retrains the course Random Forest (same features, settings, and splits) with the formatting removed, within PhiUSIIL and across datasets in both directions.
+**What this checks.** Whether the results hold up once the differences in how the datasets format their URLs are taken out. Specifically:
+- Do the near-perfect PhiUSIIL scores (99.6% accuracy for the Random Forest) come from recognizing phishing, or from URL formatting?
+- Does the formatting difference between the two datasets explain why the models fail across datasets?
+
+`scripts/check_url_format_artifacts.py` compares URL formatting between the classes, scores a one-line formatting rule, and retrains the course Random Forest (same features, settings, and splits) with the scheme and a leading `www.` removed, within PhiUSIIL and across datasets in both directions.
 
 **Why it matters.** In PhiUSIIL, every legitimate URL is a bare homepage written exactly as `https://www.<domain>`, with no path. Phishing URLs mostly are not: only 49% use HTTPS, 42% start with `www.`, and 28% have a path. A model can separate the classes by checking the format alone, which likely would not carry over to real traffic. Kaggle URLs, by contrast, are stored without `http(s)://` in both classes.
 
@@ -59,7 +63,9 @@ Both neural networks use early stopping on the validation set. All results come 
 - **The PhiUSIIL score is mostly formatting.** The rule "phishing unless the URL is exactly `https://www.<domain>`" scores **99.6% accuracy with 100% precision** on PhiUSIIL, the same as the Random Forest (99.59% vs. 99.61% on the same test split). Retraining the Random Forest with the scheme and a leading `www.` stripped from every URL drops its accuracy to **85.7%** (ROC-AUC 0.998 → 0.877). Some formatting signal still remains, since legitimate URLs never have a path.
 - **The cross-dataset collapse is not a formatting artifact.** With the scheme and `www.` stripped from both datasets, transfer does not recover: Kaggle → PhiUSIIL ROC-AUC falls from 0.71 to 0.18, and PhiUSIIL → Kaggle stays near chance (0.57 → 0.49), still flagging almost every Kaggle URL as phishing. The two datasets differ in more than formatting.
 
-**What this means.** The Kaggle results are the more reliable within-dataset comparison, because both classes share a similar format there. The PhiUSIIL scores mostly measure the dataset's formatting rather than phishing detection. The cross-dataset finding holds up: models trained on one source of URLs do not transfer to another, even with the formatting differences removed. These checks cover the Random Forest only; the DNN and CNN were not retrained. Full numbers are in `results/url_format_stats.csv` and `results/url_format_check.csv`. The script's cross-dataset Random Forest results on unmodified URLs differ slightly from the course run (for example, Kaggle → PhiUSIIL ROC-AUC 0.714 vs. 0.708); the conclusions are the same.
+**What this means.** The Kaggle results are the more reliable within-dataset comparison, because both classes share a similar format there. The PhiUSIIL scores mostly measure the dataset's formatting rather than phishing detection. The cross-dataset finding holds up: models trained on one source of URLs do not transfer to another, even with the formatting differences removed. These checks cover the Random Forest only; the DNN and CNN were not retrained. Full numbers are in `results/url_format_stats.csv` and `results/url_format_check.csv`.
+
+The script's cross-dataset Random Forest results on unmodified URLs differ slightly from the course run (for example, Kaggle → PhiUSIIL ROC-AUC 0.714 vs. 0.708); the conclusions are the same.
 
 ## Running it
 
